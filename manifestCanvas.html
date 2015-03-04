@@ -1,0 +1,62 @@
+            <div class="canvasResultTables">
+                <table>
+                    <thead>
+                        <th ng-click="canvasParts = true;" class="manifestCanvas">Canvas_{{$index + 1}} 
+                            <u ng-show="!canvas['@type'].valid || 
+                            !canvas.images.valid || !canvas.label.valid || !canvas.metadata.valid">  Contains Errors</u>
+                        </th>
+                        <th><span ng-click="canvasParts = true;">+</span> <span ng-click="canvasParts = false;">-</span></th>
+                        <th></th>
+                    </thead>
+                    <tbody ng-show="canvasParts">
+                        <tr ng-repeat="field in canvas">
+                            <td class="toggleTools">
+                                <span class="showField" ng-click="canvasType = true;" > + </span>
+                                <span class="hideField" ng-click="canvasType = false;" > - </span>
+                            </td>
+                            <td ng-show="canvasType" class="dataLabel invalid" ng-class="{valid:field.valid}">{{field.label}}</td>
+                            <td ng-show="canvasType" class="data invalid" ng-class="{valid:field.valid}">
+                                <span>{{field.data}}</span>
+                                <span ng-class="{valid:field.valid}" class="message invalid">{{field.message}}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table ng-repeat="image in canvas.images.imagesData">
+                    <thead> <!-- need this header for each image in the canvas -->
+                        <th><b style="font-size: 18px;">{{image.label}}</b></th>
+                        <th class="toggleTools">
+                            <a ng-show="!canvasImageInfo" class="moreImageInfo" ng-click="canvasImageInfo = true;"> Show Image Information </a>
+                            <a ng-show="canvasImageInfo" class="lessImageInfo" ng-click="canvasImageInfo = false;" > Hide Image Information </a>
+                        </th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        <!-- 
+                        These last two could probably be compressed to one by putting the imageMetadata and imageGuts into the 
+                        the same scope object.  Originally I thought they would have to be separated since I had to access them separately but that is
+                        not true.
+                        -->
+                    <tr ng-repeat="imageData in image.imageMetadata" ng-show="canvasImageInfo" class="imageInformation">
+                        <td class='toggleTools'>
+                            <span class="showField" ng-click="canvasImagePiece = true;"> + </span>
+                            <span class="hideField" ng-click="canvasImagePiece = false;"> - </span>
+                        </td>
+                        <td ng-show="canvasImagePiece" class="dataLabel invalid" ng-class="{valid:imageData.valid}">{{imageData.label}}</td>
+                        <td ng-show="canvasImagePiece" class="data invalid" ng-class="{valid:imageData.valid}">
+                            <span>{{imageData.data}}</span>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="imageGuts in image.imageGuts" ng-show="canvasImageInfo" class="imageInformation">
+                        <td class='toggleTools'>
+                            <span class="showField" ng-click="canvasImagePiece = true;"> + </span>
+                            <span class="hideField" ng-click="canvasImagePiece = false;"> - </span>
+                        </td>
+                        <td ng-show="canvasImagePiece" class="dataLabel invalid" ng-class="{valid:imageGuts.valid}">{{imageGuts.label}}</td>
+                        <td ng-show="canvasImagePiece" class="data invalid" ng-class="{valid:imageGuts.valid}">
+                            <span>{{imageGuts.data}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>

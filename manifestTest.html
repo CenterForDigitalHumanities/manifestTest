@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+
+Test page for ingesting a Newberry manifest.  It will make sure the string returned is a proper JSON object and parse the fields to check that the required things are present to be a valid
+manifest.  If there are any red X's on the page, the manifest is not valid and there will be errors when attempting to use it within T-PEN.   
+
+Author: Bryan Haberberger
+--------------------------------------------------------------
+angularUI help: http://angular-ui.github.io/ui-utils/
+-------------------------------------------------------------
+
+-->
+
+<html ng-app="msTestApp">
+    <head>
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Manifest Metadata Test</title>
+        <link rel="stylesheet" href="css/manifestTest.css" type="text/css" >
+        <link rel="stylesheet" href="css/bootstrap.css" type="text/css" >
+        <link rel="stylesheet" href="css/bootstrap-theme.css" type="text/css" >
+        <link type="text/css" href="css/custom-theme/jQuery.css" rel="Stylesheet" />
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>        
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-animate.js"></script>        
+        <script language="javascript" type="text/javascript" src="js/angularJSutils.js" charset="utf-8"></script>
+        <script language="javascript" type="text/javascript" src="js/ui-bootstrap-tpls-0.11.2.js" charset="utf-8"></script>
+        <script language="javascript" type="text/javascript" src="js/app.js" charset="utf-8"></script>
+        <script language="javascript" type="text/javascript" src="js/controllers.js" charset="utf-8"></script>
+        <script language="javascript" type="text/javascript" src="js/services.js" charset="utf-8"></script>
+        <script language="javascript" type="text/javascript" src="js/directives.js" charset="utf-8"></script>
+        
+    </head>
+    
+    <body>
+        <div ng-controller="GetManifestFile" style='margin:0px 20px;'>
+            <div>
+                <h3> Test a Newberry Manifest</h3>
+                <div id="directions">
+                    Either paste a manifest into the text area or search for a file saved on your machine.  When uploaded, its content will be put into
+                    the text area.  Once you have the manifest in the text area, click "Check Manifest" and the page will fill out with a checklist of things about the manifest.  You can also
+                    click "Turn On Live Checking" to have the manifest checked each time you alter the text in the text area (recommended for minor tweaks).  
+                </div><br>
+                <input file-input="content.file" on-change="putContentInTextarea();"/>
+                <textarea id="manifestObjectString" ng-model="content.input" placeholder="Paste manifest here."></textarea><br>
+                <input id="textAreaContent" type="button" class="orangeButton" ng-click="getTextareaContent();" value="Check Manifest" />
+                <input id="activateAutoChecking" type="button" class="orangeButton" ng-click="toggleAutoCheck();" value="Turn On Live Checking" />
+                <span>Object Checker Says: </span><span ng-class="{valid:objectStatus.valid}" class="invalid"  id="oStatus">{{objectStatus.status}}</span>
+            </div>
+
+            <div id="manifestTestWrapper" ng-show='manifestMetadataObject["@type"]'>
+                <h3> Manifest Metadata Information </h3>
+                <table class="manifestHeader" ng-repeat="object in manifestMetadataObject">
+                    <tbody>
+                        <tr metadatarow></tr>
+                    </tbody>
+                </table><!-- see directives.js for this template -->
+                <input type="button" class="orangeButton" id='showCanvasSection' ng-click="canvasesShowing = !canvasesShowing;" value='{{canvasesShowing && "Hide" || "Show"}} Canvas Information'/> <!-- Variables defined in ng-click get added to the scope automatically, so you do not have to declare the scrop variable at the beginning of the scope in this case -->
+    <!--            
+                <input type="button" class="orangeButton" id='showWarnings' ui-event="{click : 'showWarnings($event);'}" value='Show Warnings'/>
+                <input type="button" class="orangeButton" id='hideWarnings' ui-event="{click : 'hideWarnings($event);'}" value='Hide Warnings'/>
+     **see the functions showWarning and hideWarning in controller.js to learn more about this being commented out.            
+        -->
+                <h3>Canvas Information</h3>
+                <div ng-repeat="canvas in canvasParseObject">
+                    <table manifestcanvas ng-show="canvasesShowing" ></table>
+                </div>
+            </div>
+            
+            
+            
+
+        </div>
+        
+    </body>
+</html>
